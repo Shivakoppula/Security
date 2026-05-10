@@ -1,6 +1,6 @@
 package com.spring.security.configuration;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,15 +10,11 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.spring.security.service.MyUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -43,7 +39,9 @@ public class SecurityConfig {
 	public AuthenticationProvider authenticate() {
 		//DaoAuthenticationProvider provider=new DaoAuthenticationProvider(userDetailsService);
 		DaoAuthenticationProvider provider=new DaoAuthenticationProvider(userDetailsService);
-		provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+		//provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());// for this while login password not decoding bcz nopasswordencoder()
+		//for encoding we use object creation for BCryptingoasswordEncoder()
+		provider.setPasswordEncoder(new BCryptPasswordEncoder(12)); // 12 strength
 		//provider.setUserDetailsPasswordService((UserDetailsPasswordService) userDetailsService);
 		return provider;
 	}
