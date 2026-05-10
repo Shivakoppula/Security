@@ -10,15 +10,20 @@ import com.spring.security.entities.Users;
 import com.spring.security.service.UserService;
 
 @RestController
-@RequestMapping("/register")
+@RequestMapping()
 public class UserController {
 	@Autowired
 	private UserService service;
 	
-	@PostMapping()
+	@PostMapping("/register")
 	public Users  registration(@RequestBody Users users) {
 		 return service.register(users);
 		//return users;
+	}
+	@PostMapping("/login")
+	public String login(@RequestBody Users user) {
+	
+		return service.verify(user);
 	}
 	
 

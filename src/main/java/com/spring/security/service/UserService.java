@@ -1,6 +1,9 @@
 package com.spring.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,15 @@ public class UserService {
 	
 	//becrypt need to create object for BCryptPasswordEncoder pass value for strength
 	private BCryptPasswordEncoder encoder=new BCryptPasswordEncoder(12);
+	
+	//for verifing create authenticationmanager
+	@Autowired
+	AuthenticationManager authmManager;
+	
+	//for generating   jwt tokens
+	@Autowired
+	private JWTService jwtService;
+	
 
 	public Users register(Users users) {
 		
@@ -23,6 +35,16 @@ public class UserService {
 		users.setPassword(encoder.encode(users.getPassword()));
 	  return repo.save(users);
 	
+	}
+
+	public String verify(Users user) {
+		Authentication authenticate=
+				authmManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
+		if(authenticate.isAuthenticated())// is used to authenticated or not and boolean type
+		{
+			return jwtService.generateToken();
+		}
+		return "fail";
 	}
 
 }
