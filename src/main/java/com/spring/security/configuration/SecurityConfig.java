@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,11 +32,12 @@ public class SecurityConfig {
 				.requestMatchers("/register","/login")
 				.permitAll()
 				.anyRequest().authenticated()) //authenticate any request from different site
-		        .formLogin(form->form.disable()) // for disabling login of jwt login form
-		        .httpBasic(https->https.disable())
+		        //.formLogin(form->form.disable()) // for disabling login of jwt login form
+		        //.httpBasic(https->https.disable())
 	   //http.formLogin(Customizer.withDefaults()); //customizer username passowrd
 	   .httpBasic(Customizer.withDefaults())// to avoid html form login
-	   .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+	   .sessionManagement(session->session
+			   .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		
 		return http.build();
 	}

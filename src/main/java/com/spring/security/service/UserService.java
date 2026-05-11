@@ -21,7 +21,7 @@ public class UserService {
 	
 	//for verifing create authenticationmanager
 	@Autowired
-	AuthenticationManager authmManager;
+	AuthenticationManager authManager;
 	
 	//for generating   jwt tokens
 	@Autowired
@@ -39,10 +39,10 @@ public class UserService {
 
 	public String verify(Users user) {
 		Authentication authenticate=
-				authmManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
+				authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
 		if(authenticate.isAuthenticated())// is used to authenticated or not and boolean type
 		{
-			return jwtService.generateToken();
+			return jwtService.generateToken(user.getUsername());
 		}
 		return "fail";
 	}
