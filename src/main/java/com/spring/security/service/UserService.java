@@ -38,10 +38,10 @@ public class UserService {
 	}
 
 	public String verify(Users user) {
-		Authentication authenticate=
+		Authentication authenticate=         // by using this UsernamePasswordAuthenticationToken filter to acheive token generation
 				authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
 		if(authenticate.isAuthenticated())// is used to authenticated or not and boolean type
-		{
+		{                      //if  userverified generating token
 			return jwtService.generateToken(user.getUsername());
 		}
 		return "fail";

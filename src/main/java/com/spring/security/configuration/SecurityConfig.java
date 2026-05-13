@@ -16,6 +16,9 @@ import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.spring.security.jwtFilter.JwtFilter;
 
 
 @Configuration
@@ -23,6 +26,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private JwtFilter jwtFilter;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) {
@@ -37,7 +43,8 @@ public class SecurityConfig {
 	   //http.formLogin(Customizer.withDefaults()); //customizer username passowrd
 	   .httpBasic(Customizer.withDefaults())// to avoid html form login
 	   .sessionManagement(session->session
-			   .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+			   .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+	   .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); //instead of passing username and password we are passing token
 		
 		return http.build();
 	}
